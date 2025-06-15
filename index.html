@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot Ollama</title>
+  <style>
+    #spinner {
+      display: none;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h2>Chatbot Lokal (Ollama)</h2>
+  <textarea id="prompt" rows="4" cols="50" placeholder="Tulis pertanyaan kamu..."></textarea><br><br>
+  <button onclick="sendPrompt()">Kirim</button>
+
+  <div id="spinner">
+    <div class="loader"></div>
+    <p>Menunggu jawaban...</p>
+  </div>
+
+  <h3>Jawaban:</h3>
+  <div id="response" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px;"></div>
+
+  <script>
+    async function sendPrompt() {
+      const prompt = document.getElementById("prompt").value;
+      const spinner = document.getElementById("spinner");
+      const responseDiv = document.getElementById("response");
+
+      spinner.style.display = "block";     // Tampilkan loading
+      responseDiv.innerText = "";          // Bersihkan jawaban sebelumnya
+
+      try {
+        const res = await fetch("http://127.0.0.1:5000/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await res.json();
+        responseDiv.innerText = data.response;
+      } catch (error) {
+        responseDiv.innerText = "Terjadi kesalahan: " + error;
+      } finally {
+        spinner.style.display = "none";   // Sembunyikan loading
+      }
+    }
+  </script>
+</body>
+</html>
