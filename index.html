@@ -3,41 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>RubixAI</title>
-  <style>
-    #spinner {
-      display: none;
-      text-align: center;
-      margin: 15px 0;
-    }
-
-    .loader {
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid #3498db;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h2>Rubix</h2>
-  <textarea id="prompt" rows="4" cols="50" placeholder="Tulis pertanyaan kamu..."></textarea><br><br>
-  <button onclick="sendPrompt()">Kirim</button>
+    <img class="logo1" src="Black_and_Green_Typographical_Green_Energy_Logo-removebg-preview.png" alt="deskripsi gambar" />
+  <img class="logo" src="Screenshot_2025-06-17_at_19.08.17-removebg-preview.png" alt="deskripsi gambar" />
+
+  <textarea id="prompt" rows="2" cols="50" placeholder="Ask Anything..."></textarea>
+  <button onclick="sendPrompt()">Send</button>
 
   <div id="spinner">
     <div class="loader"></div>
-    <p>Menunggu jawaban...</p>
+    <p>Loading...</p>
   </div>
-
-  <h3>Jawaban:</h3>
-  <div id="response" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px;"></div>
+  <div id="response"></div>
 
   <script>
     async function sendPrompt() {
@@ -58,7 +40,7 @@
         const data = await res.json();
         responseDiv.innerText = data.response;
       } catch (error) {
-        responseDiv.innerText = "Terjadi kesalahan: " + error;
+        responseDiv.innerText = "Error " + error;
       } finally {
         spinner.style.display = "none";
       }
