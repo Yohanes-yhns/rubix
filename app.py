@@ -39,6 +39,11 @@ def chat():
 
     return jsonify({"response": reply})
 
+@app.route('/', methods=['GET'])
+def index():
+    return "Rubix AI server is running 🚀. POST to /chat to interact."
+
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
