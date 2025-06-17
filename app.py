@@ -1,27 +1,43 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import requests as req_to_ollama
+import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 app = Flask(__name__)
 CORS(app)
 
+API_KEY = os.getenv("TOGETHER_API_KEY")
+
 @app.route('/chat', methods=['POST'])
 def chat():
-    data = request.json
-    user_prompt = data.get("prompt", "")
+    user_prompt = request.json.get("prompt", "")
 
-    res = req_to_ollama.post("http://localhost:11434/api/generate", json={
-        "model": "llama3.2",
-        "prompt": user_prompt,
-        "stream": False
-    })
+    payload = {
+        "model": "mistralai/Mistral-7B-Instruct-v0.2",
+        "messages": [{"role": "user", "content": user_prompt}],
+        "temperature": 0.7,
+        "max_tokens": 512
+    }
+
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
 
     try:
-        bot_reply = res.json().get("response", "[Error: no response received from model]")
+        res = requests.post("https://api.together.xyz/v1/chat/completions", json=payload, headers=headers)
+        print("Status Code:", res.status_code)               # 🟢 Tambahkan ini
+        print("Response JSON:", res.text)  
+        data = res.json()
+        reply = data.get("choices", [{}])[0].get("message", {}).get("content", "Tidak ada jawaban.")
     except Exception as e:
-        bot_reply = f"[Error parsing response: {str(e)}]"
+        reply = f"[ERROR]: {str(e)}"
 
-    return jsonify({"response": bot_reply})
+    return jsonify({"response": reply})
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
