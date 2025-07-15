@@ -44,7 +44,8 @@ html, body, #root {
   color: var(--dark);
   transition: var(--transition);
   line-height: 1.6;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* === Layout === */
@@ -259,6 +260,7 @@ html, body, #root {
   position: relative;
 }
 
+
 .chat-box {
   flex: 1;
   overflow-y: auto;
@@ -268,7 +270,7 @@ html, body, #root {
   gap: 1rem;
   background-color: var(--lighter);
   width: 100%;
-  min-height: 0;
+  min-height: 0; 
 }
 
 .empty-state {
